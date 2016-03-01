@@ -41,6 +41,7 @@ public class Close extends JFrame {
 		final int frameHeight = 500;
 		
 		frame = new JFrame();
+		frame.setTitle("Algorithme Close");
 		frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
 		
 		openButton = new JButton("Ouvrir");
