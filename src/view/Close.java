@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 public class Close extends JFrame {
 	
@@ -41,8 +42,6 @@ public class Close extends JFrame {
 		
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
 		
 		openButton = new JButton("Ouvrir");
 		
@@ -50,7 +49,7 @@ public class Close extends JFrame {
 		
 		results = new JTextArea();
 		jscroll = new JScrollPane(results);
-		filePath = new JLabel("");
+		filePath = new JLabel("/");
 		supportSlider = new JSlider(0,1000,500);
 	}
 	
@@ -63,12 +62,29 @@ public class Close extends JFrame {
 		frame.add(optionPanel, BorderLayout.WEST);
 		
 		resultPanel = new JPanel();
+		resultPanel.add(jscroll);
 		frame.add(resultPanel, BorderLayout.EAST);
 	}
 	
+	public void display() {
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+	
+	public void createController() {
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+	
 	public static void main(String[] args) {
-		Close close = new Close();
-		close.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				new Close().display();
+			}
+		});
 	}
 
 }
