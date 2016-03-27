@@ -20,10 +20,14 @@ public class StdCloseModel implements CloseModel {
 	public Line getLine(int i) {
 		return hashLines.get(i);
 	}
-
+	
 	@Override
 	public void removeLine(int i) {
 		hashLines.remove(i);
 	}
-
+	
+	@Override
+	public HashMap<Integer,Line> getLines() {
+		return hashLines;
+	}
 }
