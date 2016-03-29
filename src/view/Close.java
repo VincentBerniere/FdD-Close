@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -57,12 +58,21 @@ public class Close extends JFrame {
 		final int frameHeight = 500;
 		
 		frame = new JFrame();
+		frame.setLayout(new BorderLayout());
 		frame.setTitle("Algorithme Close");
 		frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
 		
 		openButton = new JButton("Ouvrir");
 		filePath = new JLabel("/");
+		
 		results = new JTextArea();
+		results.setText("Résultat");
+		results.setLineWrap(true);
+		results.setWrapStyleWord(true);
+		results.setEditable(false);
+		
+		jscroll = new JScrollPane(results);
+		
 		openButton.addActionListener(new ActionListener() {
 
             @Override
@@ -107,8 +117,6 @@ public class Close extends JFrame {
         });
 		
 		startButton = new JButton("START");
-		jscroll = new JScrollPane(results);
-		
 		supportSlider = new JSlider(0,1000,500);
 	}
 	
@@ -121,8 +129,8 @@ public class Close extends JFrame {
 		frame.add(optionPanel, BorderLayout.WEST);
 		
 		resultPanel = new JPanel();
-		resultPanel.add(jscroll);
-		frame.add(resultPanel, BorderLayout.EAST);
+		resultPanel.add(jscroll, BorderLayout.CENTER);
+		frame.add(resultPanel);
 	}
 	
 	public void display() {

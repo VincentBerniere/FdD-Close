@@ -15,4 +15,19 @@ public class Line {
 	
 	public ArrayList<String> getItems() { return listItems; }
 	public String getItem(int i) { return listItems.get(i); }
+	
+	public String toString() {
+		String s = "";
+		
+		if (listItems.size() == 1) {
+			s = listItems.get(0);
+		} else if(listItems.size() > 1) {
+			for (int i=0; i<listItems.size()-1; i++) {
+				s += listItems.get(i) + ", ";
+			}
+			s += listItems.get(listItems.size()-1);
+		}
+		
+		return s;
+	}
 }

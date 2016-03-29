@@ -23,7 +23,9 @@ public class FileParser {
 		while ((str = buffer.readLine()) != null) {
 			tabLines = str.split("\\|",-1);
 			tabLines[tabLines.length-1] = tabLines[tabLines.length-1].substring(0, tabLines[tabLines.length-1].length()-1);
-			array.add(tabLines);
+			if (tabLines != null) {
+				array.add(tabLines);
+			}
 		}
 		buffer.close();
 		
