@@ -1,7 +1,12 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import model.Candidat;
 import model.CloseModel;
@@ -32,61 +37,80 @@ public class CloseAlgorithme {
 		ArrayList<Candidat> generateur = new ArrayList<Candidat>();
 		
 		for(Line line:items) {
-			for(String item:line.getItems()) {
-				boolean contains = false;
-				for (Candidat c:generateur) {
-					if (!contains && c.getNom().equals(item)) {
-						contains = true;
+			ArrayList<String> array = (ArrayList<String>)line.getItems().clone();
+			if (array != null) {
+				for(String item:array) {
+					if (item != null) {
+						boolean contains = false;
+						for (Candidat c:generateur) {
+							if (!contains && c.getNom().equals(item)) {
+								contains = true;
+							}
+						}
+						if (!contains) {
+							ArrayList<String> a = new ArrayList<String>();
+							a.add(item);
+							Line ferme = this.getFerme(a);
+							double supportCandidat = this.getSupport(a);
+							
+							if (supportCandidat >= support) {
+								Candidat candidat = new Candidat(item, ferme, supportCandidat/nbItems);
+								generateur.add(candidat);
+							}
+						}
 					}
-				}
-				if (!contains) {
-					Candidat candidat = new Candidat(item, this.getFerme(item), support);
-					generateur.add(candidat);
 				}
 			}
 		}
-				
+		Collections.sort(generateur, new Comparator<Candidat>() {
+			@Override
+			public int compare(Candidat o1, Candidat o2) {
+				return  o1.getNom().compareTo(o2.getNom());
+			}
+	    });
+		
 		generateurs.add(generateur);
 	}
 	
-	public Line getFerme(String candidat) {
+	public Line getFerme(ArrayList<String> candidat) {
 		String ferme = null;
-		Line itemsFerme = null;
+		Line itemsFerme = new Line();
 		
-		for (Line line : items) {
-			 if (line.getItems().contains(candidat)) {
-				 itemsFerme = line;
+		for (Line l : items) {
+			 if (itemsFerme.getItems().size() == 0 && l.getItems().containsAll(candidat)) {
+				 itemsFerme.setItems((ArrayList<String>)l.getItems().clone());
 			 }
 		}
+		
 		if (itemsFerme != null) {
-			ArrayList<Line> itemsFermeAll = new ArrayList<Line>();  
-			
-			while(itemsFerme.getItems().size() > 0) {
-				itemsFermeAll.add(itemsFerme);
-				
-				if(!itemsFerme.getItems().get(0).equals(candidat)) {
-					itemsFerme.getItems().remove(0);
-				} else if (itemsFerme.getItems().size() > 1) {
-					itemsFerme.getItems().remove(1);
-				} else {
-					itemsFerme.getItems().remove(0);
-				}
-			}
-			
-			int itemCible=0;
 			for (int i=0; i<items.size(); i++) {
-				if (items.get(i).getItems().contains(candidat)) {
-					if (!itemsFermeAll.get(itemCible).getItems().containsAll(items.get(i).getItems())) {
-						itemsFerme = items.get(i);
-					} else {
-						i=0;
-						itemCible++;
+				if (items.get(i).getItems().containsAll(candidat)) {
+					if (!items.get(i).getItems().containsAll(itemsFerme.getItems())) {
+						ArrayList<String> itemsFermeTmp = (ArrayList<String>)itemsFerme.getItems().clone();
+						for (String str:itemsFerme.getItems()) {
+							if (!items.get(i).getItems().contains(str)) {
+									itemsFermeTmp.remove(str);
+							}
+						}
+						itemsFerme.setItems(itemsFermeTmp);
 					}
 				}
 			}
 		}
 		
 		return itemsFerme;
+	}
+	
+	public double getSupport(ArrayList<String> candidat) {
+		double supportCandidat = 0;
+		
+		for(Line line:items) {
+			if (line.getItems().containsAll(candidat)) {
+				supportCandidat++;
+			}
+		}
+		
+		return supportCandidat;
 	}
 	
 	public String toString() {

@@ -30,6 +30,7 @@ public class Candidat {
 	}
 	
 	public String toString() {
+		if (ferme == null) { ferme = new Line(); }
 		return nom + " | " + ferme.toString() + " | " + support + "\n";
 	}
 }

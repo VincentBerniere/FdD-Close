@@ -63,7 +63,7 @@ public class Close extends JFrame {
 		frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
 		
 		openButton = new JButton("Ouvrir");
-		filePath = new JLabel("/");
+		filePath = new JLabel("Chemin du fichier");
 		
 		results = new JTextArea();
 		results.setText("Résultat");
@@ -107,7 +107,7 @@ public class Close extends JFrame {
                     }
                     
                     // lancement de l'algorithme Close
-                    CloseAlgorithme closeAlgo = new CloseAlgorithme(closeModel, 0.3333, array.size());
+                    CloseAlgorithme closeAlgo = new CloseAlgorithme(closeModel, 0.33333333333, array.size());
                     results.setText(closeAlgo.toString());
                     
                 } else {

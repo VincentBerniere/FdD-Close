@@ -15,7 +15,7 @@ public class Line {
 	
 	public ArrayList<String> getItems() { return listItems; }
 	public String getItem(int i) { return listItems.get(i); }
-	
+	public void setItems(ArrayList<String> l) { listItems = l; }
 	public String toString() {
 		String s = "";
 		
