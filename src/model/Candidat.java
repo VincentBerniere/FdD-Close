@@ -3,17 +3,23 @@ package model;
 import java.util.ArrayList;
 
 public class Candidat {
-	private String nom;
+	private ArrayList<String> nom;
 	private Line ferme;
 	private double support;
+	private String exactRule;
 	
-	public Candidat(String n, Line f, double s) {
+	public Candidat(ArrayList<String> n, Line f, double s) {
 		nom = n;
 		ferme = f;
 		support = s;
+		
+		// règle exact
+		ArrayList<String> array = f.getItems();
+		array.remove(n);
+		exactRule = n + " => " + new Line(array);
 	}
 	
-	public String getNom() {
+	public ArrayList<String> getNom() {
 		return nom;
 	}
 	public Line getFerme() {
@@ -28,9 +34,14 @@ public class Candidat {
 	public void setSupport(double d) {
 		support = d;
 	}
+	public String getExactRule() {
+		return exactRule;
+	}
 	
 	public String toString() {
 		if (ferme == null) { ferme = new Line(); }
-		return nom + " | " + ferme.toString() + " | " + support + "\n";
+		String s = "";
+		
+		return nom + " | " + exactRule + " | " + support + "\n";
 	}
 }

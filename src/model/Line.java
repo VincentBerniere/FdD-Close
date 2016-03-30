@@ -8,6 +8,9 @@ public class Line {
 	public Line() {
 		listItems = new ArrayList<String>();
 	}
+	public Line(ArrayList<String> array) {
+		listItems = array;
+	}
 	
 	public void addItem(String str) {
 		listItems.add(str);
@@ -17,17 +20,6 @@ public class Line {
 	public String getItem(int i) { return listItems.get(i); }
 	public void setItems(ArrayList<String> l) { listItems = l; }
 	public String toString() {
-		String s = "";
-		
-		if (listItems.size() == 1) {
-			s = listItems.get(0);
-		} else if(listItems.size() > 1) {
-			for (int i=0; i<listItems.size()-1; i++) {
-				s += listItems.get(i) + ", ";
-			}
-			s += listItems.get(listItems.size()-1);
-		}
-		
-		return s;
+		return listItems.toString();
 	}
 }

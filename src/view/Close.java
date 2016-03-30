@@ -107,7 +107,7 @@ public class Close extends JFrame {
                     }
                     
                     // lancement de l'algorithme Close
-                    CloseAlgorithme closeAlgo = new CloseAlgorithme(closeModel, 0.33333333333, array.size());
+                    CloseAlgorithme closeAlgo = new CloseAlgorithme(closeModel, 0.02, array.size());
                     results.setText(closeAlgo.toString());
                     
                 } else {
