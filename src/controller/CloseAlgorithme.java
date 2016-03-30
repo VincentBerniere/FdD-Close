@@ -34,6 +34,7 @@ public class CloseAlgorithme {
 	}
 	
 	public void generatorOneSize() {
+		//int nbSuppr = 0;
 		ArrayList<Candidat> generateur = new ArrayList<Candidat>();
 		
 		for(Line line:items) {
@@ -58,7 +59,9 @@ public class CloseAlgorithme {
 								candidatName.add(item);
 								Candidat candidat = new Candidat(candidatName, ferme, supportCandidat/nbItems);
 								generateur.add(candidat);
-							}
+							} /*else {
+								nbSuppr++;
+							}*/
 						}
 					}
 				}
@@ -82,6 +85,7 @@ public class CloseAlgorithme {
 	    });
 		
 		generateurs.add(generateur);
+		//System.out.println("nombre de règle supprimé : "+nbSuppr);
 	}
 	
 	public boolean generatorSize(int size) {
@@ -190,6 +194,28 @@ public class CloseAlgorithme {
 		return supportCandidat;
 	}
 	
+	public ArrayList<ArrayList<String>> getApproxRules(Candidat candidat) {
+		ArrayList<ArrayList<String>> rules = new ArrayList<ArrayList<String>>();
+		
+		for (ArrayList<Candidat> candidats:generateurs) {
+			for (Candidat c:candidats) {
+				if (!candidat.getNom().containsAll(c.getNom()) && 
+						c.getFerme().getItems().containsAll(candidat.getFerme().getItems())) {
+					if (!rules.contains(c.getFerme().getItems()) && 
+							!candidat.getFerme().getItems().containsAll(c.getFerme().getItems())) {
+						rules.add(c.getFerme().getItems());
+					}
+				}
+			}
+		}
+		
+		return rules;
+	}
+	
+	public double getConfiance(double supp1, double supp2) {
+		return supp2/supp1;
+	}
+	
 	public String toString() {
 		String s= "";
 		
@@ -203,7 +229,31 @@ public class CloseAlgorithme {
 			}
 		}
 		
-		System.out.println(s);
+		s += "\nGénérateurs | Règles App. | Supports | Confiances\n";
+		for(ArrayList<Candidat> c:generateurs) {
+			for(Candidat cand:c) {
+				ArrayList<ArrayList<String>> rules = this.getApproxRules(cand);
+				for (ArrayList<String> ensFerm:rules) {
+					ArrayList<String> ruleApp = (ArrayList<String>)ensFerm.clone();
+					ruleApp.removeAll(cand.getNom());
+					double supp = this.getSupport(ensFerm)/nbItems;
+					
+					s 	+= cand.getNom().toString() + " | ";
+					if(cand.getFerme().getItems().containsAll(ensFerm)) {
+						s += "-----" + " | "
+						+ "-----" + " | " 
+						+ "-----" + "\n";
+					} else {
+						s+= cand.getNom().toString() + " => " + ruleApp.toString() + " | "
+							+ supp + " | " 
+							+ this.getConfiance(cand.getSupport(), supp) + "\n";
+					
+					}
+				}
+			}
+		}
+		
+		//System.out.println(s);
 		
 		return s;
 	}

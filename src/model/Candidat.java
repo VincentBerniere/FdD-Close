@@ -14,9 +14,13 @@ public class Candidat {
 		support = s;
 		
 		// règle exact
-		ArrayList<String> array = f.getItems();
-		array.remove(n);
-		exactRule = n + " => " + new Line(array);
+		ArrayList<String> array = (ArrayList<String>)f.getItems().clone();
+		array.removeAll(n);
+		if (array.size() == 0) {
+			exactRule = "-----";
+		} else {
+			exactRule = n + " => " + new Line(array);
+		}
 	}
 	
 	public ArrayList<String> getNom() {
@@ -41,7 +45,9 @@ public class Candidat {
 	public String toString() {
 		if (ferme == null) { ferme = new Line(); }
 		String s = "";
-		
+		if (exactRule == "-----") {
+			return nom + " | " + exactRule + " | " + " " + "\n";
+		}
 		return nom + " | " + exactRule + " | " + support + "\n";
 	}
 }
