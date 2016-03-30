@@ -19,6 +19,12 @@ public class CloseAlgorithme {
 	private ArrayList<ArrayList<Candidat>> generateurs;
 	private ArrayList<Line> items;
 	
+	/**
+	 * Model de base de l'algorithme
+	 * @param fichier parser CloseModel
+	 * @param support double
+	 * @param nombres de lignes int
+	 */
 	public CloseAlgorithme(CloseModel c, double s, int n) {
 		closeModel = c;
 		support = n*s;
@@ -32,9 +38,10 @@ public class CloseAlgorithme {
 			items.add(c.getLines().get(key));
 		}
 	}
-	
+	/**
+	 * genere le generateur de taille 1
+	 */
 	public void generatorOneSize() {
-		//int nbSuppr = 0;
 		ArrayList<Candidat> generateur = new ArrayList<Candidat>();
 		
 		for(Line line:items) {
@@ -59,9 +66,7 @@ public class CloseAlgorithme {
 								candidatName.add(item);
 								Candidat candidat = new Candidat(candidatName, ferme, supportCandidat/nbItems);
 								generateur.add(candidat);
-							} /*else {
-								nbSuppr++;
-							}*/
+							}
 						}
 					}
 				}
@@ -85,9 +90,12 @@ public class CloseAlgorithme {
 	    });
 		
 		generateurs.add(generateur);
-		//System.out.println("nombre de règle supprimé : "+nbSuppr);
 	}
-	
+	/**
+	 * genere le generateur à partir de la taille 2
+	 * @param size
+	 * @return
+	 */
 	public boolean generatorSize(int size) {
 		ArrayList<Candidat> generateur = new ArrayList<Candidat>();
 		ArrayList<ArrayList<String>> candidatsName = new ArrayList<ArrayList<String>>();
@@ -152,7 +160,11 @@ public class CloseAlgorithme {
 			return true;
 		}
 	}
-	
+	/**
+	 * retourne le ferme du candidat donné en paramètre
+	 * @param candidat
+	 * @return
+	 */
 	public Line getFerme(ArrayList<String> candidat) {
 		String ferme = null;
 		Line itemsFerme = new Line();
@@ -181,7 +193,11 @@ public class CloseAlgorithme {
 		
 		return itemsFerme;
 	}
-	
+	/**
+	 * retourne le support du candidat
+	 * @param candidat
+	 * @return
+	 */
 	public double getSupport(ArrayList<String> candidat) {
 		double supportCandidat = 0;
 		
@@ -193,7 +209,11 @@ public class CloseAlgorithme {
 		
 		return supportCandidat;
 	}
-	
+	/**
+	 * retourne les sur ensembles fermes
+	 * @param candidat
+	 * @return
+	 */
 	public ArrayList<ArrayList<String>> getApproxRules(Candidat candidat) {
 		ArrayList<ArrayList<String>> rules = new ArrayList<ArrayList<String>>();
 		
@@ -211,11 +231,18 @@ public class CloseAlgorithme {
 		
 		return rules;
 	}
-	
+	/**
+	 * retourne la confiance avec 2 supports
+	 * @param supp1
+	 * @param supp2
+	 * @return
+	 */
 	public double getConfiance(double supp1, double supp2) {
 		return supp2/supp1;
 	}
-	
+	/**
+	 * Affichage console
+	 */
 	public String toString() {
 		String s= "";
 		
@@ -229,7 +256,7 @@ public class CloseAlgorithme {
 			}
 		}
 		
-		s += "\nGénérateurs | Règles App. | Supports | Confiances\n";
+		s += "\nGénérateurs | Règles App. | Supports | Confiances | Lift\n";
 		for(ArrayList<Candidat> c:generateurs) {
 			for(Candidat cand:c) {
 				ArrayList<ArrayList<String>> rules = this.getApproxRules(cand);
@@ -242,11 +269,15 @@ public class CloseAlgorithme {
 					if(cand.getFerme().getItems().containsAll(ensFerm)) {
 						s += "-----" + " | "
 						+ "-----" + " | " 
+						+ "-----" 
 						+ "-----" + "\n";
 					} else {
+						double lift = this.getSupport(ensFerm)/(this.getSupport(cand.getNom()) * this.getSupport(ruleApp));
 						s+= cand.getNom().toString() + " => " + ruleApp.toString() + " | "
 							+ supp + " | " 
-							+ this.getConfiance(cand.getSupport(), supp) + "\n";
+							+ this.getConfiance(cand.getSupport(), supp) + " | "
+							+ lift
+							+ "\n";
 					
 					}
 				}

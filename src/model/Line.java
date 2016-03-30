@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Line {
 	private ArrayList<String> listItems;
 	
+	/**
+	 * Ensemble d'elements d'une ligne du fichier texte de base
+	 */
 	public Line() {
 		listItems = new ArrayList<String>();
 	}

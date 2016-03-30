@@ -8,6 +8,12 @@ public class Candidat {
 	private double support;
 	private String exactRule;
 	
+	/**
+	 * Element d'un generateur
+	 * @param nom
+	 * @param Line
+	 * @param Support
+	 */
 	public Candidat(ArrayList<String> n, Line f, double s) {
 		nom = n;
 		ferme = f;
@@ -38,6 +44,10 @@ public class Candidat {
 	public void setSupport(double d) {
 		support = d;
 	}
+	/**
+	 * retourne la règle exacte à partir du support
+	 * @return
+	 */
 	public String getExactRule() {
 		return exactRule;
 	}

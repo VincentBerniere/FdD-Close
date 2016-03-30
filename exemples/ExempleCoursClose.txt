@@ -1,0 +1,6 @@
+0|a|c|d 
+1|b|c|e 
+2|a|b|c|e 
+3|b|e 
+4|a|b|c|e 
+5|b|c|e 

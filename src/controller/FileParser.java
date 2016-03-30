@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FileParser {
+	/**
+	 * parse le fichier texte, les elements sont separer par des '|' et les lignes finissent par un ';' ou ' '
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
 	public ArrayList<String[]> parse(File file) throws IOException {
 		BufferedReader buffer = null;
 		String[] tabLines = null;
