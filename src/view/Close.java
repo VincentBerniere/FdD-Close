@@ -43,36 +43,15 @@ public class Close extends JFrame {
 	private JScrollPane jscroll;
 	private JLabel filePath;
 	private JSlider supportSlider;
+	private ArrayList<String[]> array;
 	
 	public Close() {
 		createView();
 		placeComponents();
+		createModel();
 	}
 	
 	public void createModel() {
-		//model = new CloseModel("Algorithme Close");
-	}
-	
-	public void createView() {
-		final int frameWidth = 800;
-		final int frameHeight = 500;
-		
-		frame = new JFrame();
-		frame.setLayout(new BorderLayout());
-		frame.setTitle("Algorithme Close");
-		frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
-		
-		openButton = new JButton("Ouvrir");
-		filePath = new JLabel("Chemin du fichier");
-		
-		results = new JTextArea();
-		results.setText("Résultat");
-		results.setLineWrap(true);
-		results.setWrapStyleWord(true);
-		results.setEditable(false);
-		
-		jscroll = new JScrollPane(results);
-		
 		openButton.addActionListener(new ActionListener() {
 
             @Override
@@ -85,38 +64,71 @@ public class Close extends JFrame {
 
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
-                    filePath.setText(file.getPath());
+                    filePath.setText("Path: "+file.getPath());
                     System.out.println("Opening: " + file.getName());
                     
                     // parsing du fichier
-                    ArrayList<String[]> array = new ArrayList<String[]>();
+                    array = new ArrayList<String[]>();
                     try {
-						array = new FileParser().parse(file);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+    					array = new FileParser().parse(file);
+    				} catch (IOException io) {
+    					io.printStackTrace();
+    				}
                     
-                    // creation du model utilisant une hashMap
-                    CloseModel closeModel = new StdCloseModel();
-                    for(int i=0; i<array.size(); i++) {
-                    	Line line = new Line();
-                    	for(int j=1; j<array.get(i).length; j++) {
-                    		line.addItem(array.get(i)[j]);
-                    	}
-                    	closeModel.addLine(Integer.parseInt(array.get(i)[0].replaceAll(" +", "")), line);
-                    }
-                    
-                    // lancement de l'algorithme Close
-                    CloseAlgorithme closeAlgo = new CloseAlgorithme(closeModel, 0.02, array.size());
-                    results.setText(closeAlgo.toString());
-                    
+                    startButton.setEnabled(true);
                 } else {
                 	System.out.println("Open command cancelled by user.");
+                	 startButton.setEnabled(false);
                 }
             }
         });
 		
+		startButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                // creation du model utilisant une hashMap
+                CloseModel closeModel = new StdCloseModel();
+                for(int i=0; i<array.size(); i++) {
+                	Line line = new Line();
+                	for(int j=1; j<array.get(i).length; j++) {
+                		line.addItem(array.get(i)[j]);
+                	}
+                	closeModel.addLine(Integer.parseInt(array.get(i)[0].replaceAll(" +", "")), line);
+                }
+                
+                // lancement de l'algorithme Close
+                CloseAlgorithme closeAlgo = new CloseAlgorithme(closeModel, 0.02, array.size());
+                results.setText(closeAlgo.toString());
+			}
+		});
+		
+	}
+	
+	public void createView() {
+		final int frameWidth = 800;
+		final int frameHeight = 500;
+		
+		frame = new JFrame();
+		frame.setLayout(new BorderLayout());
+		frame.setTitle("Algorithme Close");
+		frame.setPreferredSize(new Dimension(frameWidth, frameHeight));
+		
+		openButton = new JButton("Ouvrir");
+		filePath = new JLabel("Path :");
+		
+		results = new JTextArea();
+		results.setText("Résultat");
+		results.setLineWrap(true);
+		results.setWrapStyleWord(true);
+		results.setEditable(false);
+		
+		jscroll = new JScrollPane(results);
+		jscroll.setPreferredSize(new Dimension(400, frameHeight));
+		
 		startButton = new JButton("START");
+		startButton.setEnabled(false);
+		
 		supportSlider = new JSlider(0,1000,500);
 	}
 	
@@ -126,11 +138,9 @@ public class Close extends JFrame {
 		optionPanel.add(filePath);
 		optionPanel.add(supportSlider);
 		optionPanel.add(startButton);
-		frame.add(optionPanel, BorderLayout.WEST);
 		
-		resultPanel = new JPanel();
-		resultPanel.add(jscroll, BorderLayout.CENTER);
-		frame.add(resultPanel);
+		frame.add(optionPanel, BorderLayout.WEST);
+		frame.add(jscroll, BorderLayout.CENTER);
 	}
 	
 	public void display() {
